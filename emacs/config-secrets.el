@@ -8,7 +8,7 @@
   (plist-get (plist-get svjson-tokens token) :token))
 
 (defun svjson/token-user (token)
-  (plist-get (plist-get svjson-tokens token) :user)))
+  (plist-get (plist-get svjson-tokens token) :user))
 
 
 
