@@ -7,6 +7,14 @@
 ;;; Code:
 
 
+;; Forward declarations
+(declare-function treemacs-load-theme "treemacs-themes")
+(declare-function treemacs-next-workspace "treemacs-interface")
+(declare-function treemacs-current-workspace "treemacs-workspaces")
+(declare-function treemacs-project->path "treemacs-workspaces")
+
+
+
 ;; Require packages
 
 (use-package treemacs
@@ -17,8 +25,7 @@
          ("C-c C-t -" . treemacs-collapse-all-projects)
          ("C-c C-t g" . treemacs-find-file))
   :config
-  (define-key treemacs-workspace-map (kbd "p") #'treemacs-previous-workspace)
-  )
+  (define-key treemacs-workspace-map (kbd "p") #'treemacs-previous-workspace))
 
 (use-package lsp-treemacs
   :bind (("M-m t c" . lsp-treemacs-call-hierarchy)
@@ -38,11 +45,6 @@
   :config
   (treemacs-load-theme "all-the-icons"))
 
-(require 'treemacs)
-(require 'treemacs-interface)
-(require 'treemacs-workspaces)
-(require 'treemacs-themes)
-
 
 ;; Custom functions
 
@@ -56,6 +58,7 @@
 
 Finds and returns the top-most common root directory of all treemacs
 projects in the current treemacs workspace."
+  (require 'treemacs)
   (when-let* ((workspace (treemacs-current-workspace))
               (projects (treemacs-workspace->projects workspace))
               (paths (mapcar #'treemacs-project->path projects)))
