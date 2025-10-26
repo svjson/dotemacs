@@ -18,7 +18,8 @@
 (setq-default tab-width 2)
 (toggle-truncate-lines 1)
 
-(use-package nlinum)
+(use-package nlinum
+  :commands (nlinum-mode))
 
 (require 'windmove)
 (windmove-default-keybindings)
@@ -36,13 +37,12 @@
 
 ;;; Page breaks and movement
 
-(use-package page-break-lines)
-
-(with-eval-after-load 'page-break-lines
+(use-package page-break-lines
+  :hook (after-init . global-page-break-lines-mode)
+  :config
   (defvar page-break-lines-modes)
   (dolist (mode '(typescript-ts-mode typescript-mode text-mode js-ts-mode))
-    (add-to-list 'page-break-lines-modes mode))
-  (global-page-break-lines-mode t))
+    (add-to-list 'page-break-lines-modes mode)))
 
 (defun svjson/forward-page ()
   (interactive)
