@@ -1,6 +1,14 @@
 ;;; config-global.el --- aidermacs config -*- lexical-binding: t; -*-
 
+
+
+(setq gc-cons-threshold (* 100 1024 1024))
+
+
+
 (setq shell-file-name "/bin/bash")
+
+
 
 (defun svjson/reload-feature (feature)
   "Unload FEATURE and re-require it."
