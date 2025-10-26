@@ -1,6 +1,5 @@
 ;;; config-helm-ag.el --- summary -*- lexical-binding: t -*-
 
-(require 'helm-ag)
 (require 'config-treemacs)
 
 
@@ -26,6 +25,11 @@
 
 (use-package helm-ag
   :after helm
+  :commands (helm-do-ag
+             helm-do-ag-project-root
+             svjson/helm-do-ag-workspace-root
+             svjson/helm-do-ag-project-root
+             svjson/helm-do-ag-here)
   :config
   (setq helm-ag-base-command "ag --nocolor --nogroup"))
 
@@ -41,4 +45,3 @@
 (provide 'config-helm-ag)
 
 ;;; config-helm-ag.el ends here
-
