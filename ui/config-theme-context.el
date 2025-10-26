@@ -1,8 +1,6 @@
 ;;; config-theme-context.el -*- lexical-binding: t; flycheck-disabled-checkers: (emacs-lisp-checkdoc); -*-
 
 (require 'color)
-(require 'helm)
-(require 'dashboard)
 
 
 ;; Vars
@@ -44,6 +42,7 @@
 
 (defun svjson/helm-theme-context ()
   (interactive)
+  (require 'helm)
   (helm :sources (helm-build-sync-source "Theme Context"
                    :candidates (mapcar (lambda (th) (plist-get th :name)) svjson/theme-contexts)
                    :fuzzy-match t
@@ -84,7 +83,8 @@
 (global-set-key (kbd  "M-m w") #'svjson/show-context)
 (global-set-key (kbd "M-m c") #'svjson/helm-theme-context)
 
-(define-key dashboard-mode-map (kbd "g") #'svjson/helm-theme-context)
+(with-eval-after-load 'dashboard
+  (define-key dashboard-mode-map (kbd "g") #'svjson/helm-theme-context))
 
 
 
