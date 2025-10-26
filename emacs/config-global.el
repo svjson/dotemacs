@@ -18,6 +18,13 @@
     (unload-feature feature t))
   (require feature))
 
+(defun svjson/list-buffers-by-size ()
+  (interactive)
+  (message "%s" (pp-to-string (mapcar (lambda (b)
+                                        (cons (buffer-name b)
+                                              (buffer-size b)))
+                                      (buffer-list)))))
+
 
 
 (provide 'config-global)
