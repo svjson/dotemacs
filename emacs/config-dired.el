@@ -23,7 +23,8 @@
 
 ;; Key Bindings
 
-(define-key dired-mode-map (kbd ",") #'dired-jump-to-first-file-by-letter)
+(eval-after-load 'dired-mode
+  '(define-key dired-mode-map (kbd ",") #'dired-jump-to-first-file-by-letter))
 
 
 
