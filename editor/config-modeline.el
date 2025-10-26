@@ -4,8 +4,6 @@
 ;;
 ;;; Code:
 
-(require 'doom-modeline)
-
 (defvar svjson/minor-mode-icons
   '((copilot-mode      . "✈️")
     (blacken-mode      . "✨")
@@ -84,12 +82,12 @@ Falls back to a default menu if the mode defines none."
                                   (vector (car item) (cdr item) t))
                                 extras)))
     (if (and (listp base-menu) (stringp (car base-menu)))
-        ;; ✅ Mode provides a menu, augment it
+        ;; Mode provides a menu, augment it
         (let* ((title (car base-menu))
                (body (cdr base-menu))
                (final (easy-menu-create-menu title (append extra-entries body))))
           (popup-menu final))
-      ;; ❌ Mode does not provide a menu — use fallback
+      ;; Mode does not provide a menu — use fallback
       (let ((fallback-menu (easy-menu-create-menu
                             (symbol-name mode)
                             (append
@@ -129,6 +127,7 @@ Falls back to a default menu if the mode defines none."
   (setq doom-modeline-github nil) ;; You can turn this on if you authenticate
   (setq doom-modeline-mu4e nil)   ;; Turn on if you use mu4e for mail
   (setq doom-modeline-gnus nil)
+  (setq doom-modeline-position-column-line-format '("%c:%l"))
 
   :config
   (column-number-mode 1)
@@ -136,36 +135,43 @@ Falls back to a default menu if the mode defines none."
   :hook
   (after-init . doom-modeline-mode))
 
-(add-hook 'doom-modeline-mode-hook
-	  (lambda ()
-	    (doom-modeline-def-segment svjson-minor-modes
-	      (let ((active-modes
-		     (cl-remove-if-not
-		      (lambda (mode-entry)
-			(let ((mode (car mode-entry)))
-			  (and (memq mode local-minor-modes)
-			       (not (memq mode svjson/minor-mode-ignore-list)))))
-		      minor-mode-alist)))
-		(cl-loop for mode in active-modes
-			 collect
-			 (let* ((icon (svjson/get-icon-for-mode mode))
-				(tooltip (svjson/get-tooltip-for-mode mode))
-				(map (let ((m (make-sparse-keymap)))
-				       (define-key m [mode-line mouse-1]
-						   `(lambda () (interactive)
-						      (svjson/show-minor-mode-menu ',mode)))
-				       m)))
-			   (propertize (concat " " icon)
-				       'mouse-face 'mode-line-highlight
-				       'help-echo tooltip
-				       'local-map map)))))
+(defun svjson/setup-custom-modeline ()
+  (require 'doom-modeline)
 
-	    (doom-modeline-def-modeline 'svjson-modeline
-	      '(bar window-number modals buffer-info remote-host buffer-position parrot)
-	      '(svjson-minor-modes major-mode))
+	(doom-modeline-def-segment svjson-minor-modes
+	  (let ((active-modes
+		       (cl-remove-if-not
+		        (lambda (mode-entry)
+			        (let ((mode (car mode-entry)))
+			          (and (memq mode local-minor-modes)
+			               (not (memq mode svjson/minor-mode-ignore-list)))))
+		        minor-mode-alist)))
+		  (cl-loop for mode in active-modes
+			         collect
+			         (let* ((icon (svjson/get-icon-for-mode mode))
+				              (tooltip (svjson/get-tooltip-for-mode mode))
+				              (map (let ((m (make-sparse-keymap)))
+				                     (define-key m [mode-line mouse-1]
+						                             `(lambda () (interactive)
+						                                (svjson/show-minor-mode-menu ',mode)))
+				                     m)))
+			           (propertize (concat " " icon)
+				                     'mouse-face 'mode-line-highlight
+				                     'help-echo tooltip
+				                     'local-map map)))))
 
-	    (setq-default mode-line-format '(:eval (doom-modeline 'svjson-modeline)))))
+	(doom-modeline-def-modeline 'svjson-modeline
+	  '(bar window-number modals buffer-info remote-host buffer-position parrot)
+	  '(svjson-minor-modes major-mode))
+
+	(setq-default mode-line-format '(:eval (doom-modeline 'svjson-modeline))))
+
+(with-eval-after-load 'doom-modeline
+
+
+  (add-hook 'doom-modeline-refresh-hook #'svjson/setup-custom-modeline)
+
+  (add-hook 'doom-modeline-mode-hook #'svjson/setup-custom-modeline))
 
 (provide 'config-modeline)
 ;;; config-modeline.el ends here
-
