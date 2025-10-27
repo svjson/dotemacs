@@ -2,9 +2,22 @@
 
 
 
-;;; Will be defined by helm-files
+;;; Forward-declare helm symbols
+
 (defvar helm-find-files-map)
+(defvar helm-kill-when-done)
+(declare-function helm-autoresize-mode "helm-core.el")
 (declare-function helm-find-files-1 "helm-files.el")
+
+
+
+;;; Inform autoloading
+
+(autoload 'svjson/helm-find-home "config-helm-commands" nil t)
+(autoload 'svjson/helm-find-files-here "config-helm-commands" nil t)
+(autoload 'svjson/helm-user-config "config-helm-commands" nil t)
+(autoload 'svjson/helm-complete-dwim "config-helm-commands" nil t)
+(autoload 'svjson/helm-kill-runaway-buffers "config-helm-commands" nil t)
 
 
 
@@ -17,6 +30,7 @@
         helm-autoresize-max-height 30
         helm-autoresize-min-height 30
         helm-autoresize-mode 1
+        helm-kill-when-done t
 	      helm-case-fold-search nil
         helm-display-header-line nil
 	      helm-echo-input-in-header-line t
@@ -47,10 +61,6 @@
 (use-package helm-xref
   :ensure t)
 
-(require 'helm)
-(require 'helm-core)
-(require 'helm-command)
-
 
 ;; Helm buffer display config
 
@@ -60,71 +70,6 @@
                (inhibit-same-window . t)
                (window-height . 0.3)))
 
-
-
-;; Helm recipes
-
-(defun svjson/helm-ff-complete ()
-  "Safely complete filename without triggering preview errors."
-  (interactive)
-  (let ((display-buffer-alist nil))     ; prevent preview split errors
-    (helm-execute-persistent-action)))
-
-
-;; Here lies the Great Helm TAB War of 2025
-;; Finally won by me, myself and I  after countless refreshes and nil sources.
-(defun svjson/helm-complete-dwim ()
-  "Extend Helm minibuffer input to the longest common prefix of visible candidates.
-Does not refresh or trigger persistent actions."
-  (interactive)
-  (when (and (boundp 'helm-alive-p) helm-alive-p)
-    (let* ((input helm-pattern)
-           ;; get the visible candidates as plain strings
-           (cands (mapcar (lambda (c)
-                            (if (consp c) (car c) c))
-                          (helm-get-candidates (helm-get-current-source))))
-           ;; keep only those that begin with current input
-           (matches (cl-remove-if-not
-                     (lambda (s)
-                       (string-prefix-p input s))
-                     cands)))
-      (when matches
-        (let ((prefix (try-completion input matches)))
-          (when (and (stringp prefix)
-                     (not (string-equal prefix input)))
-            ;; replace minibuffer text
-            (delete-minibuffer-contents)
-            (insert prefix)))))))
-
-
-(defun svjson/helm-find-home ()
-  "Open Helm find-files in ~/."
-  (interactive)
-  (helm-find-files-1 "~/"))
-
-
-(defun svjson/helm-find-files-here ()
-  "Launch `helm-find-files` in the directory of the current buffer."
-  (interactive)
-  (let ((default-directory (or (and buffer-file-name
-                                    (file-name-directory buffer-file-name))
-                               default-directory)))
-    (helm-find-files nil)))
-
-
-(defun svjson/helm-user-config ()
-  "Visit user config files."
-  (interactive)
-  (let* ((base-dir user-emacs-directory)
-         (files (append
-                 (list (expand-file-name "init.el" base-dir))
-                 (directory-files-recursively (expand-file-name "config" base-dir) "\\.el$")
-                 (directory-files-recursively (expand-file-name "global" base-dir) "\\.el$")
-                 (directory-files-recursively (expand-file-name "modes" base-dir) "\\.el$"))))
-    (helm :sources (helm-build-sync-source "Emacs User Config"
-                     :candidates files
-                     :fuzzy-match t
-                     :action '(("Open File" . find-file))))))
 
 
 

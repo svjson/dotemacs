@@ -3,6 +3,12 @@
 (require 'config-treemacs)
 
 
+;; Foward-declare helm-ag symbols
+
+(autoload 'helm-ag--project-root "helm-ag" nil t)
+(declare-function helm-ag--project-root "helm-ag")
+
+
 ;; Helm ag specializations
 
 (defun svjson/helm-do-ag-here ()
