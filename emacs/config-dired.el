@@ -1,6 +1,11 @@
 ;;; config-dired.el --- Early initialization -*- lexical-binding: t; -*-
 
 
+;; dired foward declarations
+(declare-function dired-move-to-filename "dired")
+(defvar dired-mode-map)
+
+
 
 (defun dired-jump-to-first-file-by-letter ()
   "Jump to the first file in Dired whose name starts with a given letter."
@@ -23,7 +28,7 @@
 
 ;; Key Bindings
 
-(eval-after-load 'dired-mode
+(eval-after-load 'dired
   '(define-key dired-mode-map (kbd ",") #'dired-jump-to-first-file-by-letter))
 
 
