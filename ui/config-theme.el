@@ -5,6 +5,7 @@
 ;;; Code:
 
 (use-package doom-themes
+  :demand t
   :config
   ;;(load-theme 'doom-one t)
   (load-theme 'hc-zenburn t)
