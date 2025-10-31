@@ -108,10 +108,10 @@ If there is no window in that direction, split one and copy into it."
 (global-set-key (kbd "C-c C-w <up>") 'windmove-swap-states-up)
 (global-set-key (kbd "C-c C-w <down>") 'windmove-swap-states-down)
 
-(global-set-key (kbd "C-c C-s-w <left>") 'windmove-duplicate-left)
-(global-set-key (kbd "C-c C-s-w <right>") 'windmove-duplicate-right)
-(global-set-key (kbd "C-c C-s-w <up>") 'windmove-duplicate-up)
-(global-set-key (kbd "C-c C-s-w <down>") 'windmove-duplicate-down)
+(global-set-key (kbd "C-c C-w M-<left>") 'windmove-duplicate-left)
+(global-set-key (kbd "C-c C-w M-<right>") 'windmove-duplicate-right)
+(global-set-key (kbd "C-c C-w M-<up>") 'windmove-duplicate-up)
+(global-set-key (kbd "C-c C-w M-<down>") 'windmove-duplicate-down)
 
 ;; Navigate page breaks
 (global-set-key (kbd "C-x [") #'svjson/backward-page)
