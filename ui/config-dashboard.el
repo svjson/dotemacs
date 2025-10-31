@@ -1,11 +1,27 @@
 ;;; -*- lexical-binding: t; flycheck-disabled-checkers: (emacs-lisp-checkdoc); -*-
 
+
+;; Forward declarations
+(declare-function dashboard-insert-recents "dashboard-widgets")
+(declare-function dashboard-insert-projects "dashboard-widgets")
+(declare-function dashboard-refresh-buffer "dashboard")
+(declare-function dashboard-return "dashboard")
+(declare-function dashboard--current-section "dashboard")
+(declare-function dashboard--goto-section "dashboard")
+
+
+
+;; use-package
+
 (use-package dashboard
+  :commands (dashboard-setup-startup-hook)
+  :hook (after-init . dashboard-setup-startup-hook)
   :config
+  (require 'dashboard-widgets)
   (setq dashboard-projects-backend 'projectile)
   (setq dashboard-items '((recents  . 10)
-			  (projects . 10)
-			  (bookmarks . 5)))
+			                    (projects . 10)
+			                    (bookmarks . 5)))
   (setq dashboard-startup-banner "~/.emacs.d/assets/logo.png")
   (setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard*")))
   (setq dashboard-center-content t)
@@ -16,12 +32,11 @@
   (dotimes (i 10)
     (let ((key (number-to-string i)))
       (define-key dashboard-mode-map (kbd key)
-		  `(lambda () (interactive) (svjson/dashboard-open-indexed-item ,i)))))
+		              `(lambda () (interactive) (svjson/dashboard-open-indexed-item ,i)))))
+  )
 
-  (dashboard-setup-startup-hook))
-
-(require 'dashboard)
-(require 'dashboard-widgets)
+
+;; Dashboard functions
 
 (defun svjson/dashboard-number-lines-in-section (section-title)
   "Prefix each entry line under SECTION-TITLE with a number."
@@ -60,6 +75,7 @@
 (defun svjson/switch-to-dashboard ()
   "Always refresh and switch to the dashboard buffer."
   (interactive)
+  (require 'dashboard)
   (dashboard-refresh-buffer)
   (switch-to-buffer "*dashboard*"))
 
