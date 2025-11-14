@@ -5,6 +5,7 @@
 (require 'config-helm)
 (require 'config-lsp)
 (require 'config-projectile)
+(require 'config-scratches)
 (require 'config-tree-sitter)
 (require 'config-yasnippet)
 (require 'config-whichkey)
