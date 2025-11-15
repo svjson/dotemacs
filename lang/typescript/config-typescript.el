@@ -2,7 +2,6 @@
 
 (require 'ecmascript-config)
 (require 'config-tree-climber)
-(require 'flycheck)
 
 
 
@@ -18,7 +17,8 @@
   (let* ((eslint-executable (expand-file-name "node_modules/.bin/eslint" (locate-dominating-file default-directory "node_modules")))
          (eslint-exec-exists (file-exists-p eslint-executable)))
 
-    (when eslint-exec-exists
+    (when (and eslint-exec-exists
+               (require 'flycheck nil t))
       (setq-local flycheck-javascript-eslint-executable eslint-executable)
       (flycheck-select-checker 'javascript-eslint))
 
@@ -33,7 +33,8 @@
       (message "Unable to locate eslint executable...")))
 
 
-  (when (project-current)
+  (when (and (project-current)
+             (require 'flycheck nil t))
     (setq flycheck-checker 'javascript-eslint)))
 
 
