@@ -12,7 +12,14 @@
                     ("Thursday" . "Torsdag")
                     ("Friday" . "Fredag ")
                     ("Saturday" . "Lördag ")
-                    ("Sunday" . "Söndag "))))
+                    ("Sunday" . "Söndag ")
+                    ("måndag" . "Måndag ")
+                    ("tisdag" . "Tisdag ")
+                    ("onsdag" . "Onsdag ")
+                    ("torsdag" . "Torsdag")
+                    ("fredag" . "Fredag ")
+                    ("lördag" . "Lördag ")
+                    ("söndag" . "Söndag "))))
     (point-max)
     (dotimes (i days-in-month)
       (let* ((day (1+ i))
@@ -20,7 +27,7 @@
              (day-string (alist-get (format-time-string "%A" date) weekday nil nil #'string=)))
         (insert (concat (format-time-string "%Y-%m-%d" date)
                         " "
-                        day-string
+                        (or day-string (format-time-string "%A" date))
                         " -\n"))
         (when (equal day-string "Söndag ")
           (insert "\n"))
