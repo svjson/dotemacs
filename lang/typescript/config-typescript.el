@@ -46,11 +46,15 @@
          ("\\.tsx\\'" . tsx-ts-mode))
   :hook ((typescript-ts-mode . svjson/typescript-ts-mode-hook)
          (tsx-ts-mode . svjson/typescript-ts-mode-hook))
+  :bind (:map typescript-ts-mode-map
+              ("M-g t" . svjson/toggle-src-test)
+              ("M-g T" . svjson/toggle-src-test-other-window)
+         :map tsx-ts-mode-map
+              ("M-g t" . svjson/toggle-src-test)
+              ("M-g T" . svjson/toggle-src-test-other-window))
   :config
   (setq-default typescript-indent-level 2)
   (setq-default typescript-ts-mode-indent-offset 2))
-
-(require 'typescript-ts-mode)
 
 
 ;; flycheck
@@ -60,12 +64,6 @@
 
 
 
-;; Key Bindings
-(define-key typescript-ts-mode-map (kbd "M-g t") #'svjson/toggle-src-test)
-(define-key typescript-ts-mode-map (kbd "M-g T") #'svjson/toggle-src-test-other-window)
-
-
-
 (provide 'config-typescript)
 
 ;;; config-typescript.el ends here
