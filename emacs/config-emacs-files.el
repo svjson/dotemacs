@@ -1,4 +1,4 @@
-;;; files.el --- Early initialization -*- lexical-binding: t; -*-
+;;; config-emacs-files.el --- Early initialization -*- lexical-binding: t; -*-
 
 (setq lock-file-name-transforms '((".*" "~/.emacs.d/lock-files/" t)))
 
@@ -22,4 +22,4 @@
 
 (provide 'config-emacs-files)
 
-;;; files.el ends here
+;;; config-emacs-files.el ends here
