@@ -5,6 +5,7 @@
 (require 'csharp-config)
 (require 'ecmascript-config)
 (require 'emacs-lisp-config)
+(require 'go-config)
 (require 'haskell-config)
 (require 'javascript-config)
 (require 'python-config)
