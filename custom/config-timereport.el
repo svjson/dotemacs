@@ -1,6 +1,18 @@
 ;;; config-timereport.el --- General editor configuration -*- lexical-binding: t; -*-
 
-(defun print-month-days (&optional year month)
+(require 'calendar)
+
+(defcustom svjson/timereport-directory (expand-file-name "time-reports" (getenv "HOME"))
+  "Directory to store time report sheets"
+  :type 'string
+  :group 'user)
+
+(defcustom svjson/timereport-file-pattern "time-report-%s.txt"
+  "Pattern for time report sheets"
+  :type 'string
+  :group 'user)
+
+(defun svjson/print-month-days (&optional year month)
   "Print each day of MONTH in YEAR with its weekday."
   (interactive)
   (let* ((year (or year (string-to-number (format-time-string "%Y"))))
@@ -34,6 +46,11 @@
         (when (equal day-string "Fredag ")
           (insert "\n"))))))
 
+
+(defun svjson/open-timereport ()
+  "Open the time report sheet for the current month"
+  (interactive)
+  (find-file (expand-file-name (format svjson/timereport-file-pattern (format-time-string "%Y-%m")) svjson/timereport-directory) ))
 
 
 
