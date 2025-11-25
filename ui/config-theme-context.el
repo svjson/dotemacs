@@ -27,16 +27,21 @@
   (mapc #'disable-theme custom-enabled-themes)
   (load-theme theme t))
 
+(defun svjson/get-theme-context-name ()
+  "Get the name of the active theme context."
+  (plist-get svjson/current-context :name))
+
 (defun svjson/show-context ()
   (interactive)
   (if svjson/current-context
-      (message "=> %s" svjson/current-context)
+      (message "=> %s" (plist-get svjson/current-context :name))
     (message "No context set")))
 
 (defun svjson/enable-context-theme (theme-name)
+  (require 'config-treemacs)
   (let ((context-theme (seq-find (lambda (th) (string-equal theme-name (plist-get th :name))) svjson/theme-contexts)))
     (svjson/context-theme (plist-get context-theme :theme))
-    (setq svjson/current-context theme-name)
+    (setq svjson/current-context context-theme)
     (dired (plist-get context-theme :root))))
 
 
