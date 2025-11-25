@@ -3,10 +3,16 @@
 (require 'elisp-mode)
 
 (defun svjson/toggle-debug-on-error ()
-  "Toggle `debug-on-error` and `debug-on-signal`."
+  "Toggle `debug-on-error'."
   (interactive)
-  (setq debug-on-error (not debug-on-error)
-        debug-on-signal debug-on-error)
+  (setq debug-on-error (not debug-on-error))
+  (message "debug-on-error: %s, debug-on-signal: %s"
+           debug-on-error debug-on-signal))
+
+(defun svjson/toggle-debug-on-signal ()
+  "Toggle `debug-on-signal'."
+  (interactive)
+  (setq debug-on-signal (not debug-on-signal))
   (message "debug-on-error: %s, debug-on-signal: %s"
            debug-on-error debug-on-signal))
 
@@ -21,6 +27,7 @@
 ;; Key Bindings
 
 (define-key emacs-lisp-mode-map (kbd "C-c C-d") #'svjson/toggle-debug-on-error)
+(define-key emacs-lisp-mode-map (kbd "C-c C-s") #'svjson/toggle-debug-on-error)
 
 
 (provide 'config-elisp-debug)
