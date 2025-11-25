@@ -8,6 +8,7 @@
 
 
 ;; Forward declarations
+
 (declare-function treemacs-load-theme "treemacs-themes")
 (declare-function treemacs-next-workspace "treemacs-interface")
 (declare-function treemacs-current-workspace "treemacs-workspaces")
@@ -44,6 +45,28 @@
   :after all-the-icons
   :config
   (treemacs-load-theme "all-the-icons"))
+
+
+(defun svjson/switch-to-context-workspace (&rest _)
+  "Switch the workspace of the current theme context."
+  (when-let ((ws-name (svjson/get-theme-context-name)))
+    (treemacs-do-switch-workspace ws-name)))
+
+(defun svjson/treemacs-ensure-workspace (&rest _)
+  "Ensure the context workspace exists once Treemacs is initialized."
+  (let* ((name (svjson/get-theme-context-name))
+         (ws   (treemacs-find-workspace-by-name name)))
+    (unless ws
+      (setq ws (treemacs-workspace->create! :name name))
+      (push ws treemacs--workspaces))))
+
+(defun svjson/treemacs-post-init ()
+  (when (svjson/get-theme-context-name)
+    (svjson/ensure-context-workspace)
+    (svjson/switch-to-context-workspace)))
+
+(with-eval-after-load 'treemacs
+  (advice-add 'treemacs :after #'svjson/switch-to-context-workspace))
 
 
 ;; Custom functions
