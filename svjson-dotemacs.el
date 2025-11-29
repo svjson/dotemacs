@@ -1,8 +1,9 @@
 ;;; svjson-dotemacs.el --- summary -*- lexical-binding: t -*-
 
-(let ((local-file (expand-file-name "config/svjson-local-secrets.el" user-emacs-directory)))
-  (when (file-exists-p local-file)
-    (load local-file)))
+(dolist (file '("svjson-local-secrets.el" "svjson-theme-contexts.el"))
+  (let ((local-file (expand-file-name (format "config/%s" file) user-emacs-directory)))
+    (when (file-exists-p local-file)
+      (load local-file))))
 
 (require 'packages-config)
 (require 'emacs-config)
