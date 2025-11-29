@@ -4,7 +4,9 @@
 
 (add-to-list 'load-path "/home/svjson/devel/opensource/projects/tree-climber/clients/tree-climber.el/")
 
-(require 'tree-climber)
+(use-package tree-climber
+  :load-path "/home/svjson/devel/opensource/projects/tree-climber/clients/tree-climber.el/"
+  :commands (tree-climber-mode))
 
 (provide 'config-tree-climber)
 
