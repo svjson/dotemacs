@@ -8,21 +8,52 @@
 
 (require 'config-markdown)
 
+
+
+;; Forward declarations
+
+(declare-function copilot-accept-completion "copilot")
+(declare-function copilot-previous-completion "copilot")
+(declare-function copilot-next-completion "copilot")
+
 
 
-(unless (package-installed-p 'copilot)
-  (package-vc-install "https://github.com/copilot-emacs/copilot.el"))
+(defvar svjson/copilot/init-complete nil)
 
-(require 'copilot)
+(add-hook 'emacs-startup-hook
+          (lambda ()
+            (setq svjson/copilot/init-complete t)))
+
+(defun svjson/maybe-enable-copilot (&rest _)
+  (when (and svjson/copilot/init-complete
+             (derived-mode-p 'prog-mode)
+             (get-buffer-window (current-buffer) 'visible)
+             (not (bound-and-true-p copilot-mode)))
+
+    (message "Loading copilot for buffer %s" (current-buffer))
+
+    (require 'copilot nil t)
+
+    (when (featurep 'copilot)
+      (copilot-mode 1))))
+
+(add-to-list 'window-selection-change-functions #'svjson/maybe-enable-copilot)
+(add-hook 'find-file-hook #'svjson/maybe-enable-copilot)
+(add-hook 'buffer-list-update-hook #'svjson/maybe-enable-copilot)
 
 (use-package copilot
-  :hook (prog-mode . copilot-mode)
+  :bind (:map copilot-completion-map
+              ("<tab>" . #'copilot-accept-completion)
+              ("<return>" . #'copilot-accept-completion)
+              ("M-P" . #'copilot-previous-completion)
+              ("M-N" . #'copilot-next-completion))
   :config
   (with-eval-after-load 'copilot
     (setq copilot-enable-predicates nil) ;; don't auto-trigger at all
     (setq copilot-disable-predicates '(always)) ;; always prevent idle triggers
-    ;;(global-set-key (kbd "M-<iso-lefttab>") #'copilot-complete)
-    ))
+
+    (define-key prog-mode-map (kbd "M-S-<iso-lefttab>") #'svjson/copilot-complete-or-toggle)
+    (define-key markdown-mode-map (kbd "M-S-<iso-lefttab>") #'svjson/copilot-complete-or-toggle)))
 
 (defun svjson/copilot-complete-or-toggle ()
   "Trigger Copilot completion manually."
@@ -34,14 +65,6 @@
 
 
 ;; Key Bindings
-
-(define-key prog-mode-map (kbd "M-S-<iso-lefttab>") #'svjson/copilot-complete-or-toggle)
-(define-key markdown-mode-map (kbd "M-S-<iso-lefttab>") #'svjson/copilot-complete-or-toggle)
-
-(define-key copilot-completion-map (kbd "<tab>") #'copilot-accept-completion)
-(define-key copilot-completion-map (kbd "<return>") #'copilot-accept-completion)
-(define-key copilot-completion-map (kbd "M-P") #'copilot-previous-completion)
-(define-key copilot-completion-map (kbd "M-N") #'copilot-next-completion)
 
 
 
