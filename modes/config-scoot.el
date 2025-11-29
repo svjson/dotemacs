@@ -8,6 +8,7 @@
 (pcase svjson/scoot-source
   ('devel
    (add-to-list 'load-path "/home/svjson/devel/opensource/projects/scoot/scoot.el/")
+   (add-to-list 'load-path "/home/svjson/devel/opensource/projects/scoot/scoot.el/test/")
    (add-to-list 'load-path "/home/svjson/devel/opensource/projects/scoot/system_test/emacs/tests"))
 
   ('straight
