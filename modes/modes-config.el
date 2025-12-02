@@ -1,5 +1,6 @@
 ;;; modes-config.el --- Package manager config -*- lexical-binding: t; -*-
 
+(require 'config-chunkgrab)
 (require 'config-heed)
 (require 'config-kubernetes)
 (require 'config-magit)
