@@ -2,9 +2,9 @@
 ;;; config-tree-sitter.el --- Emacs TypeScript + TSX IDE Setup Outline -*- lexical-binding: t; -*-
 
 (use-package treesit-auto
+  :hook (after-init . global-treesit-auto-mode)
   :config
-  (setq treesit-auto-install 'prompt)
-  (global-treesit-auto-mode))
+  (setq treesit-auto-install 'prompt))
 
 
 
