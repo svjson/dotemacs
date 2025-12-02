@@ -13,9 +13,12 @@
 Use the Git root of the current buffer if possible, otherwise fallback
 to `svjson/last-projectile-project-root`."
   (interactive)
-  (let* ((git-root (or (vc-call-backend 'Git 'root default-directory)
-                       (when (fboundp 'magit-toplevel)
-                         (ignore-errors (magit-toplevel)))))
+  (let* ((git-root (when-let ((gr (or (vc-call-backend 'Git 'root default-directory)
+                                      (when (fboundp 'magit-toplevel)
+                                        (ignore-errors (magit-toplevel))))))
+                     (unless (equal (expand-file-name gr)
+                                    (expand-file-name (getenv "HOME")))
+                       gr)))
          (root (or git-root svjson/last-projectile-project-root)))
     (if root
         (let ((buf (magit-status-setup-buffer root)))
