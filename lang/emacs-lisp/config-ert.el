@@ -1,13 +1,16 @@
 ;;; config-ert.el --- Package manager config -*- lexical-binding: t; -*-
 
+(require 'ert)
+
 (defun svjson/run-ert-tests-in-buffer ()
   "Run all ERT tests defined in the current buffer."
   (interactive)
-  (let ((test-names nil))
-    (save-excursion
-      (goto-char (point-min))
-      (while (re-search-forward "^(ert-deftest \\([^ ]+\\)" nil t)
-        (setq test-names (append test-names (list (intern (match-string 1)))))))
+  (let ((test-names (seq-filter
+                     (lambda (test)
+                       (equal (buffer-file-name)
+                              (ert-test-file-name
+                               (ert-get-test test))))
+                     (apropos-internal "" #'ert-test-boundp))))
     (message "%s" test-names)
     (ert `(member ,@test-names))))
 
