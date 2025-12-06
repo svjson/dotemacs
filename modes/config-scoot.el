@@ -1,9 +1,20 @@
 ;;; config-scoot.el --- summary -*- lexical-binding: t -*-
 
+
+
+;; Forward declarations
+
 (declare-function straight-use-package "straight-el")
 
+
+
 ;; Switch between loading scoot from development dir or test installing with straight
+
 (defconst svjson/scoot-source 'devel)
+
+
+
+;; Load path
 
 (pcase svjson/scoot-source
   ('devel
@@ -17,8 +28,14 @@
             :repo "/home/svjson/devel/opensource/projects/scoot"
             :files ("scoot.el/*.el")))))
 
+
+
+;; Load
+
 (require 'scoot)
 
+
+
 
 (provide 'config-scoot)
 
