@@ -1,6 +1,7 @@
 ;;; config-org.el --- summary -*- lexical-binding: t -*-
 
 (require 'org)
+(require 'org-agenda)
 
 
 
@@ -10,6 +11,13 @@
 (setq org-todo-keyword-faces
       '(("ONGOING" . "orange")
         ("PAUSED" . "yellow")))
+
+(setq org-tags-column -80)
+
+(setq org-agenda-skip-scheduled-if-deadline-is-shown nil)
+(setq org-agenda-skip-deadline-if-done nil)
+(setq org-agenda-skip-scheduled-if-done nil)
+(setq org-scheduled-past-days 99999)
 
 ;; Key Bindings
 
