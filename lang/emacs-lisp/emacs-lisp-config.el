@@ -4,6 +4,7 @@
 (require 'config-elisp-eval)
 (require 'config-elisp-symbol-bindings)
 (require 'config-ert)
+(require 'config-ert-params)
 
 (provide 'emacs-lisp-config)
 
